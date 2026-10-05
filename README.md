@@ -63,6 +63,8 @@ knee-xray-classifier/
 └── README.md
 ```
 
+Some sample images are provided in Testing Images for quick model testing purposes
+
 ## 🚀 Run Locally
 
 ```bash
