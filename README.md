@@ -77,6 +77,9 @@ The trained model is downloaded from Hugging Face when the application starts.
 
 ## 🌐 Live Demo
 
+**Working Video**
+https://www.youtube.com/watch?v=curDGwR9VZY
+
 **Streamlit:**  
 https://knee-xray-classifier-dr5ldacmpvt64catmav8pj.streamlit.app/
 
