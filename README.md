@@ -1,46 +1,69 @@
-# Knee X-Ray Classifier
+# 🦴 Knee X-Ray Classifier
 
-A deep learning web application that classifies knee X-ray images into five osteoarthritis severity levels using a Convolutional Neural Network (CNN).
+A CNN-based deep learning application that classifies knee X-ray images into **five osteoarthritis severity levels** with confidence scores and Grad-CAM visual explanations.
 
-## Classes
+<p align="center">
 
-- Normal
-- Doubtful
-- Mild
-- Moderate
-- Severe
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat&logo=python&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.20-FF6F00?style=flat&logo=tensorflow&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=flat&logo=streamlit&logoColor=white)
+![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Model-FFD21E?style=flat&logo=huggingface&logoColor=black)
+![OpenCV](https://img.shields.io/badge/OpenCV-4.0+-5C3EE8?style=flat&logo=opencv&logoColor=white)
 
-## Tech Stack
+</p>
 
-- Python
-- TensorFlow / Keras
-- CNN
-- Streamlit
-- NumPy
-- Pillow
-- Hugging Face Hub
+## ✨ Features
 
-## How It Works
+- 🧠 CNN-based knee X-ray classification
+- 📊 Five severity classes: **Normal, Doubtful, Mild, Moderate, Severe**
+- 🎯 Prediction confidence and class probabilities
+- 🔥 Grad-CAM visualization for model explainability
+- 🌐 Streamlit web application
+- ☁️ Model hosted separately on Hugging Face
 
-1. Upload a knee X-ray image.
-2. The image is converted to grayscale and resized to `200 × 200`.
-3. The trained CNN processes the image.
-4. The application predicts the severity class and confidence score.
-5. Prediction probabilities for all five classes are displayed.
+## ⚙️ Working
 
-## Project Structure
+```text
+Knee X-Ray
+    ↓
+Grayscale + Resize (200×200)
+    ↓
+CNN Model
+    ↓
+┌───────────────────────┐
+│ Severity Prediction   │
+│ Confidence Score      │
+│ Class Probabilities   │
+│ Grad-CAM Heatmap      │
+└───────────────────────┘
+```
+
+## 🛠️ Tech Stack
+
+| Component | Technology |
+|---|---|
+| Language | Python |
+| Deep Learning | TensorFlow / Keras |
+| Model | Custom CNN |
+| Explainability | Grad-CAM |
+| Interface | Streamlit |
+| Image Processing | Pillow, OpenCV |
+| Model Hosting | Hugging Face Hub |
+
+## 📁 Structure
 
 ```text
 knee-xray-classifier/
 ├── app.py
 ├── predict.py
 ├── preprocessing.py
+├── gradcam.py
 ├── requirements.txt
 ├── runtime.txt
 └── README.md
 ```
 
-## Run Locally
+## 🚀 Run Locally
 
 ```bash
 git clone https://github.com/adrijghosh8/knee-xray-classifier.git
@@ -50,12 +73,13 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The trained model is hosted separately on Hugging Face and downloaded by the application when required.
+The trained model is downloaded from Hugging Face when the application starts.
 
-## Deployment
+## 🌐 Live Demo
 
-The application is deployed using **Streamlit Community Cloud**, while the trained model is hosted on **Hugging Face Hub**.
+**Streamlit:**  
+https://knee-xray-classifier-dr5ldacmpvt64catmav8pj.streamlit.app/
 
-## Disclaimer
+## ⚠️ Disclaimer
 
-This project is intended for educational and demonstration purposes only. It is not a medical diagnostic tool.
+This project is intended for **educational and demonstration purposes only** and should not be used as a medical diagnostic tool.
