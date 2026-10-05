@@ -1,5 +1,6 @@
 import html
 import sys
+from gradcam import make_gradcam_heatmap, create_gradcam_overlay
 from huggingface_hub import hf_hub_download
 from pathlib import Path
 
@@ -14,10 +15,7 @@ sys.path.insert(0, str(ROOT))
 
 from backend.preprocessing import load_data 
 
-MODEL_PATH = hf_hub_download(
-    repo_id="adrij1041/knee-xray-model",
-    filename="model_knee_02.h5"
-)
+MODEL_PATH = r"models\model_knee_02.h5"
 
 CLASSES = ["Normal", "Doubtful", "Mild", "Moderate", "Severe"]
 ALLOWED_TYPES = ["png", "jpg", "jpeg"]
@@ -37,14 +35,42 @@ def get_model():
 
 
 def predict(image: Image.Image) -> dict:
-    probabilities = get_model().predict(load_data(image), verbose=0)[0]
-    index = int(np.argmax(probabilities))
+
+    model = get_model()
+
+    processed_image = load_data(image)
+
+    predictions = model.predict(
+        processed_image,
+        verbose=0
+    )[0]
+
+    index = int(np.argmax(predictions))
+
+    heatmap = make_gradcam_heatmap(
+        processed_image,
+        model,
+        index
+    )
+
+    original = image.convert("L")
+    original = original.resize((200, 200))
+    original = np.array(original)
+
+    overlay = create_gradcam_overlay(
+        original,
+        heatmap
+    )
+
     return {
         "prediction": CLASSES[index],
-        "confidence": float(probabilities[index]),
-        "probabilities": {c: float(probabilities[i]) for i, c in enumerate(CLASSES)},
+        "confidence": float(predictions[index]),
+        "probabilities": {
+            c: float(predictions[i])
+            for i, c in enumerate(CLASSES)
+        },
+        "gradcam": overlay,
     }
-
 
 st.markdown(
     """
@@ -130,8 +156,8 @@ def run_prediction(uploaded_file):
 
     try:
         return predict(image), None
-    except Exception:
-        return None, "Prediction failed. Please try again."
+    except Exception as e:
+        return None, f"Prediction failed: {type(e).__name__}: {e}"
 
 
 def pct(value: float) -> str:
@@ -162,6 +188,13 @@ def render_result(result: dict):
             f'<span class="pct">{pct(p)}</span></div>'
         )
     st.markdown(bars, unsafe_allow_html=True)
+    st.markdown("### Grad-CAM")
+
+    st.image(
+        result["gradcam"],
+        caption="Regions influencing the prediction",
+        use_container_width=True
+    )
 
 
 st.title("Knee X-Ray Classifier")
