@@ -15,7 +15,10 @@ sys.path.insert(0, str(ROOT))
 
 from backend.preprocessing import load_data 
 
-MODEL_PATH = r"models\model_knee_02.h5"
+MODEL_PATH = hf_hub_download(
+    repo_id="adrij1041/knee-xray-model",
+    filename="model_knee_02.h5"
+)
 
 CLASSES = ["Normal", "Doubtful", "Mild", "Moderate", "Severe"]
 ALLOWED_TYPES = ["png", "jpg", "jpeg"]
