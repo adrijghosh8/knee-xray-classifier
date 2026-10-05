@@ -1,10 +1,14 @@
 import numpy as np
+from huggingface_hub import hf_hub_download
 from tensorflow.keras.models import load_model # type: ignore
 
 from preprocessing import load_data
 
 
-MODEL_PATH = r"models\model_knee_02.h5"
+MODEL_PATH = hf_hub_download(
+    repo_id="adrij1041/knee-xray-model",
+    filename="model_knee_02.h5"
+)
 
 CLASS_NAMES = [
     "Normal",
