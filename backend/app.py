@@ -1,21 +1,24 @@
 import html
 import sys
+from huggingface_hub import hf_hub_download
 from pathlib import Path
 
 import numpy as np
 import streamlit as st
 from PIL import Image, UnidentifiedImageError
 
-# Make the project's `backend` package importable (app sits next to, or inside
-# a folder next to, the `backend/` directory).
 ROOT = Path(__file__).resolve().parent
 if not (ROOT / "backend").exists():
     ROOT = ROOT.parent
 sys.path.insert(0, str(ROOT))
 
-from backend.preprocessing import load_data  # noqa: E402
+from backend.preprocessing import load_data 
 
-MODEL_PATH = ROOT / "backend" / "models" / "model_knee_02.h5"
+MODEL_PATH = hf_hub_download(
+    repo_id="adrij1041/knee-xray-model",
+    filename="model_knee_02.h5"
+)
+
 CLASSES = ["Normal", "Doubtful", "Mild", "Moderate", "Severe"]
 ALLOWED_TYPES = ["png", "jpg", "jpeg"]
 
@@ -28,7 +31,6 @@ st.set_page_config(
 
 @st.cache_resource
 def get_model():
-    """Load the Keras model once and reuse it across reruns."""
     from tensorflow.keras.models import load_model  # type: ignore
 
     return load_model(str(MODEL_PATH))
@@ -44,7 +46,6 @@ def predict(image: Image.Image) -> dict:
     }
 
 
-# ---------- Styling (light mode) ----------
 st.markdown(
     """
     <style>
@@ -105,8 +106,6 @@ st.markdown(
 )
 
 
-# ---------- State ----------
-# "uploader_key" lets us clear the file uploader when the user resets.
 if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = 0
 if "result" not in st.session_state:
@@ -165,7 +164,6 @@ def render_result(result: dict):
     st.markdown(bars, unsafe_allow_html=True)
 
 
-# ---------- Page ----------
 st.title("Knee X-Ray Classifier")
 st.markdown(
     '<p class="subtitle">Upload a knee X-ray to estimate osteoarthritis severity.</p>',
